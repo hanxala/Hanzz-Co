@@ -1,0 +1,27 @@
+{
+  "name": "website",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@clerk/nextjs": "^6.35.6",
+    "cloudinary": "^2.8.0",
+    "inngest": "^3.46.0",
+    "mongoose": "^9.0.0",
+    "next": "15.1.0",
+    "react": "^18",
+    "react-dom": "^18",
+    "svix": "^1.82.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "typescript": "^5"
+  }
+}
