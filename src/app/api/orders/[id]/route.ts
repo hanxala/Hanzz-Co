@@ -7,7 +7,7 @@ import User from '@/models/User';
 // GET /api/orders/[id] - Fetch single order
 export async function GET(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const { userId } = await auth();
@@ -20,8 +20,9 @@ export async function GET(
         }
 
         await connectDB();
+        const { id } = await params;
 
-        const order = await Order.findById(params.id).lean();
+        const order = await Order.findById(id).lean();
 
         if (!order) {
             return NextResponse.json(
@@ -57,7 +58,7 @@ export async function GET(
 // PATCH /api/orders/[id] - Update order (admin only)
 export async function PATCH(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const { userId } = await auth();
@@ -70,6 +71,7 @@ export async function PATCH(
         }
 
         await connectDB();
+        const { id } = await params;
 
         // Check if user is admin
         const user = await User.findOne({ clerkId: userId });
@@ -90,7 +92,7 @@ export async function PATCH(
         if (notes !== undefined) updateData.notes = notes;
 
         const order = await Order.findByIdAndUpdate(
-            params.id,
+            id,
             updateData,
             { new: true, runValidators: true }
         );
@@ -119,7 +121,7 @@ export async function PATCH(
 // DELETE /api/orders/[id] - Cancel order
 export async function DELETE(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const { userId } = await auth();
@@ -132,8 +134,9 @@ export async function DELETE(
         }
 
         await connectDB();
+        const { id } = await params;
 
-        const order = await Order.findById(params.id);
+        const order = await Order.findById(id);
 
         if (!order) {
             return NextResponse.json(

@@ -5,11 +5,12 @@ import Product from '@/models/Product';
 // GET single product
 export async function GET(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         await connectDB();
-        const product = await Product.findById(params.id);
+        const { id } = await params;
+        const product = await Product.findById(id);
 
         if (!product) {
             return NextResponse.json(
@@ -30,14 +31,15 @@ export async function GET(
 // PATCH - Update product
 export async function PATCH(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         await connectDB();
+        const { id } = await params;
         const body = await request.json();
 
         const product = await Product.findByIdAndUpdate(
-            params.id,
+            id,
             { $set: body },
             { new: true, runValidators: true }
         );
@@ -65,11 +67,12 @@ export async function PATCH(
 // DELETE product
 export async function DELETE(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         await connectDB();
-        const product = await Product.findByIdAndDelete(params.id);
+        const { id } = await params;
+        const product = await Product.findByIdAndDelete(id);
 
         if (!product) {
             return NextResponse.json(

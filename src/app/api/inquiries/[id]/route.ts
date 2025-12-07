@@ -5,14 +5,15 @@ import Inquiry from '@/models/Inquiry';
 // PATCH - Update inquiry
 export async function PATCH(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         await connectDB();
         const body = await request.json();
+        const { id } = await params;
 
         const inquiry = await Inquiry.findByIdAndUpdate(
-            params.id,
+            id,
             { $set: body },
             { new: true, runValidators: true }
         );
@@ -40,11 +41,12 @@ export async function PATCH(
 // DELETE inquiry
 export async function DELETE(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         await connectDB();
-        const inquiry = await Inquiry.findByIdAndDelete(params.id);
+        const { id } = await params;
+        const inquiry = await Inquiry.findByIdAndDelete(id);
 
         if (!inquiry) {
             return NextResponse.json(
