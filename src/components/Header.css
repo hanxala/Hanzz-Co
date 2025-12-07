@@ -149,6 +149,7 @@
     transform: translateX(100%);
     transition: transform var(--transition-base);
     z-index: var(--z-modal);
+    overflow-y: auto;
 }
 
 .nav-mobile.active {
@@ -181,8 +182,26 @@
 
     .menu-toggle {
         display: flex;
+        z-index: var(--z-popover);
     }
-}/* Actions Section */
+}
+
+/* Mobile Auth Section */
+.nav-mobile .auth-section-mobile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+    width: 100%;
+}
+
+.nav-mobile .btn {
+    width: 80%;
+    max-width: 300px;
+    text-align: center;
+}
+
+/* Actions Section */
 .actions-section {
     display: flex;
     align-items: center;

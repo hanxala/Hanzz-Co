@@ -119,11 +119,32 @@ export default function Header() {
         <Link href="/contact" className="nav-link-mobile" onClick={() => setIsMenuOpen(false)}>
           Contact
         </Link>
-        {isLoaded && user && (
-          <Link href="/profile" className="nav-link-mobile" onClick={() => setIsMenuOpen(false)}>
-            Profile
-          </Link>
-        )}
+
+        {/* Mobile Auth Links */}
+        <div className="auth-section-mobile">
+          {isLoaded && user ? (
+            <>
+              <Link href="/profile" className="nav-link-mobile" onClick={() => setIsMenuOpen(false)}>
+                Profile
+              </Link>
+              <Link href="/orders" className="nav-link-mobile" onClick={() => setIsMenuOpen(false)}>
+                My Orders
+              </Link>
+              {/* Note: In a real app we might want a proper Sign Out button here, 
+                  but strictly following the request to just add links for now. 
+                  The UserButton on desktop handles sign out. 
+                  For mobile, users might need to go to Profile or we rely on UserButton if we could embed it.
+                  For now, adding the requested links. */}
+              <Link href="/admin" className="nav-link-mobile" onClick={() => setIsMenuOpen(false)}>
+                Admin Dashboard
+              </Link>
+            </>
+          ) : (
+            <Link href="/sign-in" className="nav-link-mobile" onClick={() => setIsMenuOpen(false)}>
+              Sign In
+            </Link>
+          )}
+        </div>
       </nav>
     </header>
   );
