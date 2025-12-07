@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -18,28 +18,36 @@ interface Product {
     featured: boolean;
 }
 
-export default function Collections() {
+function CollectionsContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
-    const category = searchParams.get('category');
+    const categoryQuery = searchParams.get('category');
+
+    // activeCategory state initialization
+    const [activeCategory, setActiveCategory] = useState<string>(categoryQuery || 'all');
 
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [activeCategory, setActiveCategory] = useState<string>(category || 'all');
 
+    // Update active category when URL changes
     useEffect(() => {
-        setActiveCategory(category || 'all');
-        fetchProducts();
-    }, [category]);
+        const cat = searchParams.get('category');
+        setActiveCategory(cat || 'all');
+    }, [searchParams]);
 
-    const fetchProducts = async () => {
+    // Fetch products when activeCategory changes
+    useEffect(() => {
+        fetchProducts(activeCategory);
+    }, [activeCategory]);
+
+    const fetchProducts = async (category: string) => {
         try {
             setLoading(true);
             setError(null);
 
             let url = '/api/products';
-            if (category) {
+            if (category && category !== 'all') {
                 url += `?category=${category}`;
             }
 
@@ -94,30 +102,15 @@ export default function Collections() {
             <section className="filters-section">
                 <div className="container">
                     <div className="filters">
-                        <button
-                            className={`filter-btn ${activeCategory === 'all' ? 'active' : ''}`}
-                            onClick={() => handleCategoryFilter('all')}
-                        >
-                            All
-                        </button>
-                        <button
-                            className={`filter-btn ${activeCategory === 'menswear' ? 'active' : ''}`}
-                            onClick={() => handleCategoryFilter('menswear')}
-                        >
-                            Menswear
-                        </button>
-                        <button
-                            className={`filter-btn ${activeCategory === 'womenswear' ? 'active' : ''}`}
-                            onClick={() => handleCategoryFilter('womenswear')}
-                        >
-                            Womenswear
-                        </button>
-                        <button
-                            className={`filter-btn ${activeCategory === 'accessories' ? 'active' : ''}`}
-                            onClick={() => handleCategoryFilter('accessories')}
-                        >
-                            Accessories
-                        </button>
+                        {['all', 'menswear', 'womenswear', 'accessories'].map((cat) => (
+                            <button
+                                key={cat}
+                                className={`filter-btn ${activeCategory === cat ? 'active' : ''}`}
+                                onClick={() => handleCategoryFilter(cat)}
+                            >
+                                {cat.charAt(0).toUpperCase() + cat.slice(1)}
+                            </button>
+                        ))}
                     </div>
                 </div>
             </section>
@@ -132,7 +125,7 @@ export default function Collections() {
                     ) : error ? (
                         <div className="error-state">
                             <p>{error}</p>
-                            <button onClick={fetchProducts} className="btn btn-primary">Retry</button>
+                            <button onClick={() => fetchProducts(activeCategory)} className="btn btn-primary">Retry</button>
                         </div>
                     ) : products.length === 0 ? (
                         <div className="empty-state">
@@ -185,5 +178,13 @@ export default function Collections() {
                 </div>
             </section>
         </>
+    );
+}
+
+export default function Collections() {
+    return (
+        <Suspense fallback={<div className="loading-screen">Loading collections...</div>}>
+            <CollectionsContent />
+        </Suspense>
     );
 }
