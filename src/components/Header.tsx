@@ -90,18 +90,17 @@ export default function Header() {
                 )
               )}
             </div>
+            {/* Mobile Menu Toggle */}
+            <button
+              className={`menu-toggle ${isMenuOpen ? 'active' : ''}`}
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label="Toggle menu"
+            >
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
           </div>
-
-          {/* Mobile Menu Toggle */}
-          <button
-            className={`menu-toggle ${isMenuOpen ? 'active' : ''}`}
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Toggle menu"
-          >
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
         </div>
       </div>
 
