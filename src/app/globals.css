@@ -133,8 +133,7 @@
   --z-tooltip: 700;
 }
 
-/* Google Fonts Import */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@300;400;500;600;700&display=swap');
+
 
 /* Base Styles */
 html {
