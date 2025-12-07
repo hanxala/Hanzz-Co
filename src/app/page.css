@@ -20,7 +20,19 @@
 
 .hero-image {
     object-fit: cover;
-    animation: slowZoom 20s ease-in-out infinite alternate;
+    /* Only apply zoom animation if it's the image, video handles its own motion usually, 
+       but we can keep it if we want the fallback to zoom. 
+       For the video element itself: */
+}
+
+.hero-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
 }
 
 @keyframes slowZoom {
