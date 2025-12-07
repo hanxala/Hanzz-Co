@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { CURRENCY } from '@/lib/constants';
@@ -19,14 +19,17 @@ interface Product {
 }
 
 export default function Collections() {
+    const router = useRouter();
     const searchParams = useSearchParams();
     const category = searchParams.get('category');
 
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [activeCategory, setActiveCategory] = useState<string>(category || 'all');
 
     useEffect(() => {
+        setActiveCategory(category || 'all');
         fetchProducts();
     }, [category]);
 
@@ -53,6 +56,14 @@ export default function Collections() {
             setError('Failed to load products');
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleCategoryFilter = (categoryValue: string) => {
+        if (categoryValue === 'all') {
+            router.push('/collections');
+        } else {
+            router.push(`/collections?category=${categoryValue}`);
         }
     };
 
@@ -83,10 +94,30 @@ export default function Collections() {
             <section className="filters-section">
                 <div className="container">
                     <div className="filters">
-                        <button className="filter-btn active">All</button>
-                        <button className="filter-btn">Menswear</button>
-                        <button className="filter-btn">Womenswear</button>
-                        <button className="filter-btn">Accessories</button>
+                        <button
+                            className={`filter-btn ${activeCategory === 'all' ? 'active' : ''}`}
+                            onClick={() => handleCategoryFilter('all')}
+                        >
+                            All
+                        </button>
+                        <button
+                            className={`filter-btn ${activeCategory === 'menswear' ? 'active' : ''}`}
+                            onClick={() => handleCategoryFilter('menswear')}
+                        >
+                            Menswear
+                        </button>
+                        <button
+                            className={`filter-btn ${activeCategory === 'womenswear' ? 'active' : ''}`}
+                            onClick={() => handleCategoryFilter('womenswear')}
+                        >
+                            Womenswear
+                        </button>
+                        <button
+                            className={`filter-btn ${activeCategory === 'accessories' ? 'active' : ''}`}
+                            onClick={() => handleCategoryFilter('accessories')}
+                        >
+                            Accessories
+                        </button>
                     </div>
                 </div>
             </section>

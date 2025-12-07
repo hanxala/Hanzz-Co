@@ -1,23 +1,18 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useCart } from '@/context/CartContext';
-import { CURRENCY, getWhatsAppLink } from '@/lib/constants';
+import { CURRENCY } from '@/lib/constants';
 import './cart.css';
 
 export default function CartPage() {
+    const router = useRouter();
     const { cart, removeFromCart, updateQuantity, cartTotal, clearCart } = useCart();
 
     const handleCheckout = () => {
-        // Create a detailed message for WhatsApp checkout
-        const itemsList = cart.map(item =>
-            `- ${item.name} (${item.size}, ${item.color}) x${item.quantity}: ${CURRENCY.symbol}${item.price * item.quantity}`
-        ).join('\n');
-
-        const message = `Hi Hanzz & Co., I would like to place an order:\n\n${itemsList}\n\nTotal: ${CURRENCY.symbol}${cartTotal}\n\nPlease confirm availability and payment details.`;
-
-        window.open(getWhatsAppLink(message), '_blank');
+        router.push('/checkout');
     };
 
     if (cart.length === 0) {
