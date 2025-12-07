@@ -25,35 +25,9 @@ export const syncUserToDatabase = inngest.createFunction(
             await User.create({
                 clerkId: id,
                 email: email_addresses[0].email_address,
-                firstName: first_name,
-                lastName: last_name,
-                profileImage: image_url,
-                role: 'customer',
-            });
-        });
-    }
-);
-
-export const processInquiry = inngest.createFunction(
-    { id: 'process-inquiry' },
-    { event: 'app/inquiry.created' },
-    async ({ event, step }) => {
-        const { inquiryId } = event.data;
-
-        await step.run('connect-db', async () => {
-            await connectDB();
-        });
-
-        const inquiry = await step.run('fetch-inquiry', async () => {
-            return await Inquiry.findById(inquiryId);
-        });
-
-        if (!inquiry) return;
-
-        // Here you would typically send an email
-        // For now we'll just log it
-        await step.run('log-inquiry', async () => {
-            console.log(`Processing inquiry for ${inquiry.email}: ${inquiry.service}`);
-        });
-    }
-);
+                // For now we'll just log it
+                await step.run('log-inquiry', async () => {
+                    console.log(`Processing inquiry for ${inquiry.email}: ${inquiry.service}`);
+                });
+            }
+            );
