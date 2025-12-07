@@ -46,7 +46,7 @@ export const processInquiry = inngest.createFunction(
 
         const inquiry = await step.run('fetch-inquiry', async () => {
             return await Inquiry.findById(inquiryId);
-        });
+        }) as { email: string; service: string } | null;
 
         if (!inquiry) return;
 
