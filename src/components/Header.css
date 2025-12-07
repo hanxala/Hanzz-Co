@@ -182,7 +182,14 @@
 
     .menu-toggle {
         display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        flex-shrink: 0;
         z-index: var(--z-popover);
+        margin-left: 0.5rem;
     }
 }
 
@@ -205,7 +212,8 @@
 .actions-section {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
+    gap: 1rem;
+    flex-shrink: 0;
 }
 
 /* Cart Icon */
